@@ -103,10 +103,22 @@ def parse(all_dirs: Generator, auto_parse):
 
                 # Действия
                 while True:
-                    decree = Prompt.ask(f"[green]Если все ОК нажмите Enter", choices=['p', 'l', 'o', 'n', 'd'], default='')
+                    decree = Prompt.ask(f"[green]Если все ОК нажмите Enter", choices=['p', 'l', 'o', 'n', 'd', 'e', 't'], default='')
                     if decree == 'p':
                         # Пропустить все оставшееся
                         is_pass.append(True)
+                        break
+                    elif decree == 'e':
+                        # Перенести папку в ERROR
+                        is_pass.append(True)
+                        print(dir)
+                        utils.move_to(dir, 'combo', 'Error')
+                        break
+                    elif decree == 't':
+                        # Перенести папку в TRASH
+                        is_pass.append(True)
+                        print(dir)
+                        utils.move_to(dir, 'combo', 'Trash')
                         break
                     elif decree == 'l':
                         # Пропустить файл
@@ -137,7 +149,7 @@ def parse(all_dirs: Generator, auto_parse):
                         break
                 if decree == 'l':
                     continue
-                elif decree == 'p':
+                elif decree in ['p', 'e', 't']:
                     break
 
                 skip = IntPrompt.ask('Пропустить строк', default=0)

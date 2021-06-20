@@ -13,6 +13,7 @@ from rich.theme import Theme
 from Regex import regex_dict, rs
 from hash_identifer import identify_hashes
 import os
+import shutil
 import pandas
 from pathlib import Path
 import re
@@ -204,6 +205,23 @@ def write_to_complete(dir, type):
 def write_to_passed_dirs(dir, type):
     with open(os.path.join('C:\\', 'Source', type, 'passed_dirs.txt'), 'a', encoding='utf-8') as f:
         f.write("\n" + str(dir.absolute()))
+
+
+def move_to(dir, type, destination):
+    PD = str(os.environ['PARSING_DISK_NAME'])
+    dir = str(dir)
+    line_source = dir.replace('C:\\Source', f'{PD}:\\Source')
+    line_move = line_source.replace(f'{PD}:\\Source', f'{PD}:\\' + destination.capitalize())
+    if type == 'combo':
+        path_source = Path(os.path.join(*Path(line_source).parts[:4]))
+        path_move = Path(os.path.join(*Path(line_move).parts[:4]))
+        shutil.move(str(path_source), str(path_move))
+    else:
+        path_source = Path(os.path.join(*Path(line_source).parts[:5]))
+        path_move = Path(os.path.join(*Path(line_move).parts[:5]))
+        if not Path(os.path.join(*path_move.parts[:4])).exists():
+            Path(os.path.join(*path_move.parts[:4])).mkdir()
+        shutil.move(str(path_source), str(path_move))
 
 
 def csv_write_2(path: Path, keys: tuple, colsnames, delimiter: str, skip: int):
